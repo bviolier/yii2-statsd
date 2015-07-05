@@ -1,2 +1,3 @@
 # yii2-statsd
-A statsd component that uses domnikl/statsd
+Just a simple component to use StatsD (domnikl/statsd) through Yii2
+

@@ -1,0 +1,34 @@
+{
+  "name": "bviolier/yii2-statsd",
+  "description": "A statsd component that uses domnikl/statsd",
+  "homepage": "https://github.com/bviolier/yii2-statsd",
+  "keywords": [
+    "yii2",
+    "statsd",
+    "metrics"
+  ],
+  "type": "yii2-extension",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/bviolier/yii2-statsd/issues",
+    "source": "https://github.com/bviolier/yii2-statsd"
+  },
+  "authors": [
+    {
+      "name": "Bob Violier",
+      "email": "bob@violier.eu",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "~2.0.4",
+    "domnikl/statsd": "~2.1.0"
+  },
+  "prefer-stable": true,
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "bobviolier\\yii2\\statsd\\": ""
+    }
+  }
+}
