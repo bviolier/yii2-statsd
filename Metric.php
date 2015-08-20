@@ -33,6 +33,7 @@ class Metric extends Component
     public $host = '127.0.0.1';
     public $port = 8125;
     public $namespace = 'messagebird';
+    public $applicationName;
 
     /**
      * @var Statsd\Connection\UdpSocket
@@ -44,6 +45,7 @@ class Metric extends Component
      */
     protected $client;
 
+
     /**
      * @inheritdoc
      */
@@ -52,6 +54,52 @@ class Metric extends Component
         parent::init();
         $this->connection = new Statsd\Connection\UdpSocket($this->host, $this->port);
         $this->client     = new Statsd\Client($this->connection, $this->namespace);
+    }
+
+    /**
+     * @param      $httpCode
+     * @param null $applicationName
+     */
+    public function logHttpResponse($httpCode, $applicationName = null)
+    {
+        $this->increment($this->getApplicationName($applicationName) . '.http_response.' . $httpCode);
+    }
+
+    /**
+     * @param      $ms
+     * @param null $applicationName
+     */
+    public function logResponseTimeMs($ms, $applicationName = null)
+    {
+        $this->increment($this->getApplicationName($applicationName).'.response_time_ms', $ms);
+    }
+
+    /**
+     * @param                 $ms - Milliseconds
+     * @param \Exception|null $exception
+     * @param null            $applicationName
+     */
+    public function logError($ms, \Exception $exception = null, $applicationName = null)
+    {
+        $httpCode = 500;
+        if ($exception) {
+            $httpCode = $exception->getCode();
+        }
+        $this->increment($this->getApplicationName($applicationName).'.response_time_ms', $ms);
+        $this->increment($this->getApplicationName($applicationName) . '.http_response.' . $httpCode);
+    }
+
+    /**
+     * @param null $overwrite
+     *
+     * @return null
+     */
+    protected function getApplicationName($overwrite = null)
+    {
+        if ($overwrite) {
+            return $overwrite;
+        }
+        return $this->applicationName;
     }
 
     /**
