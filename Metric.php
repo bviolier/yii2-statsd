@@ -72,7 +72,7 @@ class Metric extends Component
      */
     public function logResponseTimeMs($ms, $applicationName = null)
     {
-        $this->increment($this->getApplicationName($applicationName).'.response_time_ms', $ms);
+        $this->timing($this->getApplicationName($applicationName).'.response_time_ms', $ms);
     }
 
     /**
