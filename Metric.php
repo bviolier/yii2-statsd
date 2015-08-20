@@ -4,6 +4,7 @@ namespace bobviolier\yii2\statsd;
 
 use \yii\base\Component;
 use \Domnikl\Statsd;
+use yii\web;
 
 /**
  * Yii2 Statsd component
@@ -33,7 +34,7 @@ class Metric extends Component
     public $host = '127.0.0.1';
     public $port = 8125;
     public $namespace = 'messagebird';
-    public $applicationName;
+    public $applicationName = 'messagebird';
 
     /**
      * @var Statsd\Connection\UdpSocket
@@ -81,19 +82,19 @@ class Metric extends Component
      */
     public function logError($ms, \Exception $exception = null, $applicationName = null)
     {
-        $httpCode = 500;
-        if ($exception) {
-            $httpCode = $exception->getCode();
+        if ($exception and $exception instanceof web\HttpException) {
+            $httpCode = $exception->statusCode;
+        } elseif (\Yii::$app instanceof web\Application) {
+            $httpCode = \Yii::$app->response->getStatusCode();
+        } else {
+            $httpCode = 0;
         }
-        $this->increment($this->getApplicationName($applicationName).'.response_time_ms', $ms);
-        $this->increment($this->getApplicationName($applicationName) . '.http_response.' . $httpCode);
+
+        $this->logHttpResponse($httpCode, $applicationName);
+        $this->logResponseTimeMs($ms, $applicationName);
     }
 
-    /**
-     * @param null $overwrite
-     *
-     * @return null
-     */
+
     protected function getApplicationName($overwrite = null)
     {
         if ($overwrite) {
