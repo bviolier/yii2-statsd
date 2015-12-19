@@ -104,7 +104,7 @@ class Metric extends Component
      * @param string $methodName
      * @param array  $arguments
      */
-    public static function __call($methodName, $arguments)
+    public function __call($methodName, $arguments)
     {
         if ($this->client && method_exists($this->client, $methodName)) {
             call_user_func_array([$this->client, $methodName], $arguments);
