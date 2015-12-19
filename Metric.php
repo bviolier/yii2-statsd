@@ -37,11 +37,6 @@ class Metric extends Component
     public $applicationName = 'messagebird';
 
     /**
-     * @var Statsd\Connection\UdpSocket
-     */
-    protected $connection;
-
-    /**
      * @var Statsd\Client
      */
     protected $client;
@@ -53,8 +48,8 @@ class Metric extends Component
     public function init()
     {
         parent::init();
-        $this->connection = new Statsd\Connection\UdpSocket($this->host, $this->port);
-        $this->client     = new Statsd\Client($this->connection, $this->namespace);
+        $connection   = new Statsd\Connection\UdpSocket($this->host, $this->port);
+        $this->client = new Statsd\Client($connection, $this->namespace);
     }
 
     /**
