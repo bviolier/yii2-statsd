@@ -102,148 +102,17 @@ class Metric extends Component
         }
         return $this->applicationName;
     }
-
+    
     /**
-     * @inheritdoc
+     * Call a statsd method in Statsd\Client using $this->client as configured object
+     *
+     * @param string $methodName
+     * @param array  $arguments
      */
-    public function increment($key, $sampleRate = 1)
+    public static function __call($methodName, $arguments)
     {
-        $this->client->increment($key, $sampleRate);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function decrement($key, $sampleRate = 1)
-    {
-        $this->client->decrement($key, $sampleRate);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function count($key, $value, $sampleRate = 1)
-    {
-        $this->client->count($key, $value, $sampleRate);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function timing($key, $value, $sampleRate = 1)
-    {
-        $this->client->timing($key, $value, $sampleRate);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function startTiming($key)
-    {
-        $this->client->startTiming($key);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function endTiming($key, $sampleRate = 1)
-    {
-        return $this->client->endTiming($key, $sampleRate);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function startMemoryProfile($key)
-    {
-        $this->client->startMemoryProfile($key);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function endMemoryProfile($key, $sampleRate = 1)
-    {
-        $this->client->endMemoryProfile($key, $sampleRate);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function memory($key, $memory = null, $sampleRate = 1)
-    {
-        $this->client->memory($key, $memory, $sampleRate);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function time($key, \Closure $_block, $sampleRate = 1)
-    {
-        return $this->client->time($key, $_block, $sampleRate);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function gauge($key, $value)
-    {
-        $this->client->gauge($key, $value);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function set($key, $value)
-    {
-        $this->client->set($key, $value);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setNamespace($namespace)
-    {
-        $this->client->setNamespace($namespace);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getNamespace()
-    {
-        return $this->client->getNamespace();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isBatch()
-    {
-        return $this->client->isBatch();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function startBatch()
-    {
-        $this->client->startBatch();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function endBatch()
-    {
-        $this->client->endBatch();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function cancelBatch()
-    {
-        $this->client->cancelBatch();
+        if ($this->client && method_exists($this->client, $methodName)) {
+            call_user_func_array([$this->client, $methodName], $arguments);
+        }
     }
 }
