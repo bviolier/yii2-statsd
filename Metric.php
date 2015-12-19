@@ -37,6 +37,11 @@ class Metric extends Component
     public $applicationName = 'messagebird';
 
     /**
+     * @var Statsd\Connection\UdpSocket
+     */
+    protected $connection;
+
+    /**
      * @var Statsd\Client
      */
     protected $client;
@@ -48,8 +53,8 @@ class Metric extends Component
     public function init()
     {
         parent::init();
-        $connection   = new Statsd\Connection\UdpSocket($this->host, $this->port);
-        $this->client = new Statsd\Client($connection, $this->namespace);
+        $this->connection = new Statsd\Connection\UdpSocket($this->host, $this->port);
+        $this->client     = new Statsd\Client($this->connection, $this->namespace);
     }
 
     /**
@@ -104,7 +109,7 @@ class Metric extends Component
      * @param string $methodName
      * @param array  $arguments
      */
-    public static function __call($methodName, $arguments)
+    public function __call($methodName, $arguments)
     {
         if ($this->client && method_exists($this->client, $methodName)) {
             call_user_func_array([$this->client, $methodName], $arguments);
