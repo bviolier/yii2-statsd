@@ -27,6 +27,23 @@ use yii\web;
  *      ...
  * ];
  * ```
+ *
+ * @method static void increment($key, $sampleRate = 1)
+ * @method static void decrement($key, $sampleRate = 1)
+ * @method static voice count($key, $value, $sampleRate = 1)
+ * @method static void timing($key, $value, $sampleRate = 1)
+ * @method static void startTiming($key)
+ * @method static float|null endTiming($key, $sampleRate = 1)
+ * @method static void startMemoryProfile($key)
+ * @method static void endMemoryProfile($key, $sampleRate = 1)
+ * @method static mixed memory($key, $memory = null)
+ * @method static void time($key)
+ * @method static void gauge($key, $value)
+ * @method static void set($key, $value)
+ * @method static bool isBatch()
+ * @method static void startBatch()
+ * @method static void endBatch()
+ * @method static void cancelBatch()
  */
 class Metric extends Component
 {
